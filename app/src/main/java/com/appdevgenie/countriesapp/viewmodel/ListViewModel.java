@@ -22,11 +22,11 @@ public class ListViewModel extends ViewModel {
 
         // dummy data
         CountryModel country1 = new CountryModel("test1", "test1", "");
-        CountryModel country2 = new CountryModel("test1", "test1", "");
-        CountryModel country3 = new CountryModel("test1", "test1", "");
-        CountryModel country4 = new CountryModel("test1", "test1", "");
-        CountryModel country5 = new CountryModel("test1", "test1", "");
-        CountryModel country6 = new CountryModel("test1", "test1", "");
+        CountryModel country2 = new CountryModel("test2", "test2", "");
+        CountryModel country3 = new CountryModel("test3", "test3", "");
+        CountryModel country4 = new CountryModel("test4", "test4", "");
+        CountryModel country5 = new CountryModel("test5", "test5", "");
+        CountryModel country6 = new CountryModel("test6", "test6", "");
 
         List<CountryModel> countryModelList = new ArrayList<>();
         countryModelList.add(country1);
