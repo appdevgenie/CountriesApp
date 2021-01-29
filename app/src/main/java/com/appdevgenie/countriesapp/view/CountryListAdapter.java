@@ -13,7 +13,6 @@ import com.appdevgenie.countriesapp.R;
 import com.appdevgenie.countriesapp.model.CountryModel;
 
 import java.util.List;
-import java.util.zip.Inflater;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
