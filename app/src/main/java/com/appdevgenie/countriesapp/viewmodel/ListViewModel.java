@@ -3,10 +3,17 @@ package com.appdevgenie.countriesapp.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.appdevgenie.countriesapp.model.CountriesService;
 import com.appdevgenie.countriesapp.model.CountryModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 
 public class ListViewModel extends ViewModel {
 
@@ -14,30 +21,43 @@ public class ListViewModel extends ViewModel {
     public MutableLiveData<Boolean> countryLoadError = new MutableLiveData<>();
     public MutableLiveData<Boolean> loading = new MutableLiveData<>();
 
+    private CountriesService countriesService = CountriesService.getInstance();
+
+    private CompositeDisposable disposable = new CompositeDisposable();
+
     public void refresh(){
         fetchCountries();
     }
 
     private void fetchCountries(){
+        loading.setValue(true);
+        disposable.add(
+                countriesService.getCountries()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<List<CountryModel>>(){
 
-        // dummy data
-        CountryModel country1 = new CountryModel("test1", "test1", "");
-        CountryModel country2 = new CountryModel("test2", "test2", "");
-        CountryModel country3 = new CountryModel("test3", "test3", "");
-        CountryModel country4 = new CountryModel("test4", "test4", "");
-        CountryModel country5 = new CountryModel("test5", "test5", "");
-        CountryModel country6 = new CountryModel("test6", "test6", "");
+                    @Override
+                    public void onSuccess(@NonNull List<CountryModel> countryModels) {
+                        countries.setValue(countryModels);
+                        countryLoadError.setValue(false);
+                        loading.setValue(false);
+                    }
 
-        List<CountryModel> countryModelList = new ArrayList<>();
-        countryModelList.add(country1);
-        countryModelList.add(country2);
-        countryModelList.add(country3);
-        countryModelList.add(country4);
-        countryModelList.add(country5);
-        countryModelList.add(country6);
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        countryLoadError.setValue(true);
+                        loading.setValue(false);
+                        e.printStackTrace();
+                    }
+                })
+        );
 
-        countries.setValue(countryModelList);
-        countryLoadError.setValue(false);
-        loading.setValue(false);
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        disposable.clear();
     }
 }
