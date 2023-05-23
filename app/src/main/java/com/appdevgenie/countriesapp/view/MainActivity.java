@@ -16,11 +16,19 @@ import com.appdevgenie.countriesapp.R;
 import com.appdevgenie.countriesapp.model.CountryModel;
 import com.appdevgenie.countriesapp.viewmodel.ListViewModel;
 
+import org.reactivestreams.Subscription;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ListViewModel listViewModel;
     private CountryListAdapter adapter = new CountryListAdapter(new ArrayList<>());
+    private Disposable disposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +70,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
         observerViewModel();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        if (disposable.isDisposed()) {
+//            disposable = Observable.interval(1000, 10000, TimeUnit.MILLISECONDS)
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(new Consumer<Long>() {
+//                        @Override
+//                        public void accept(Long aLong) throws Exception {
+//                            listViewModel.refresh();
+//                        }
+//                    });
+//        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //disposable.dispose();
     }
 
     private void observerViewModel() {

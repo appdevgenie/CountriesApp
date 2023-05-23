@@ -7,7 +7,6 @@ import com.appdevgenie.countriesapp.di.DaggerApiComponent;
 import com.appdevgenie.countriesapp.model.CountriesService;
 import com.appdevgenie.countriesapp.model.CountryModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,7 +26,7 @@ public class ListViewModel extends ViewModel {
     @Inject
     public CountriesService countriesService;
 
-    private CompositeDisposable disposable = new CompositeDisposable();
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
     public ListViewModel() {
         super();
